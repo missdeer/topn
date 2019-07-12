@@ -71,6 +71,7 @@ func main() {
 	}
 
 	// count in each smaller file
+	var items []Item
 	for _, f := range fm {
 		f.Seek(0, 0)
 		sm := make(map[string]int)
@@ -83,5 +84,14 @@ func main() {
 			sm[line]++
 		}
 		f.Close()
+
+		for s, c := range sm {
+			item := Item{
+				Str:   s,
+				Count: c,
+			}
+			items = append(items, item)
+		}
+		heapSort(items)
 	}
 }
