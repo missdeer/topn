@@ -37,6 +37,12 @@ int hash(const std::string& str)
     return res & (N-1); // means (res % 128)
 }
 
+bool appendToFile(const std::string& line, std::ofstream& ofs)
+{
+    ofs << line << "\n";
+    return true;
+}
+
 bool readSplitInput(const std::string& inputFile, const std::vector<std::string>& fileNames)
 {
     // use file mapping to accelerate large file reading
@@ -54,8 +60,14 @@ bool readSplitInput(const std::string& inputFile, const std::vector<std::string>
                             );
 
         //Get the address of the mapped region
-        unsigned char * addr = static_cast<unsigned char *>(region.get_address());
+        char * addr = static_cast<char *>(region.get_address());
         std::size_t size  = region.get_size();
+
+        char * p = addr;
+        while (*p != '\n') p++;
+        std::string s(addr, p-addr);
+        int h = hash(s);
+        // h ==> file name
 
 
     } catch (std::exception& e) {
@@ -91,6 +103,7 @@ int main(int argc, char* argv[])
     fileNames.reserve(N);
     for (int i = 0; i < N; i ++)
         fileNames.push_back(tempDir + "/" + std::to_string(i));
+
 
     std::cout << "read from file " << inputFile << ", use " << tempDir << " as temporary directory.\n";
     if (!readSplitInput(inputFile, fileNames))
