@@ -15,6 +15,9 @@ func split(file *os.File, fm map[int]*os.File) {
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		if line == "" {
+			continue
+		}
 		h := hash(line)
 		// write line to file(h)
 		f, ok := fm[h]

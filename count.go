@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func count(fm map[int]*os.File) (items []Item) {
+func count(fm map[int]*os.File, topN int) (items []Item) {
 	// count in each smaller file
 	for _, f := range fm {
 		f.Seek(0, 0)
@@ -21,16 +21,19 @@ func count(fm map[int]*os.File) (items []Item) {
 		f.Close()
 
 		for s, c := range sm {
-			if (len(items) >= 100 && c >= items[0].Count) || len(items) < 100 {
+			if (len(items) >= topN && c >= items[0].Count) || // drop smaller ones
+				len(items) < topN {
 				items = append(items, Item{
 					Str:   s,
 					Count: c,
 				})
 			}
 		}
-		topNHeapSort(items, 100)
-		if len(items) > 100 {
-			items = items[len(items)-1-100:] // last 100 elements
+
+		// get the top N items
+		topNHeapSort(items, topN)
+		if len(items) > topN {
+			items = items[len(items)-topN:] // keep the last N elements
 		}
 	}
 	return
