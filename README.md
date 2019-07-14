@@ -1,9 +1,15 @@
 # topn
 pick up Top 100 items
 
+# Build
+
+```
+go get github.com/missdeer/topn
+```
+
 # Usage
 
-* use script in directory `gen` to generate test data.
+* use script in directory `gen` (`go get github.com/missdeer/topn/gen`) to generate test data.
 * pick up top 100 items from specified text file, eg:
   
 ```
