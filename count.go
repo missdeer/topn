@@ -29,7 +29,9 @@ func count(fm map[int]*os.File) (items []Item) {
 			}
 		}
 		topNHeapSort(items, 100)
-		items = items[len(items)-1-100:] // last 100 elements
+		if len(items) > 100 {
+			items = items[len(items)-1-100:] // last 100 elements
+		}
 	}
 	return
 }

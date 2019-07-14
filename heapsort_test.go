@@ -78,4 +78,25 @@ func TestTopNHeapSort(t *testing.T) {
 	if !reflect.DeepEqual(arr[5:], expected1) {
 		t.Errorf("expected %v, got %v", expected1, arr)
 	}
+
+	arr = []Item{
+		{"c", 13},
+		{"a", 12},
+		{"b", 11},
+		{"d", 5},
+		{"e", 6},
+		{"f", 7},
+	}
+	expected4 := []Item{
+		{"d", 5},
+		{"e", 6},
+		{"f", 7},
+		{"b", 11},
+		{"a", 12},
+		{"c", 13},
+	}
+	topNHeapSort(arr, 100)
+	if !reflect.DeepEqual(arr, expected4) {
+		t.Errorf("expected %v, got %v", expected4, arr)
+	}
 }

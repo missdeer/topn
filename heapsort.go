@@ -12,7 +12,7 @@ func topNHeapSort(arr []Item, topn int) {
 		heapifyItem(arr, n, i)
 	}
 
-	for i := n - 1; i > n-1-topn; i-- {
+	for i, c := n-1, 0; i > 0 && c < topn; i, c = i-1, c+1 {
 		arr[i], arr[0] = arr[0], arr[i]
 		heapifyItem(arr, i, 0)
 	}
