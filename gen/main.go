@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"os"
 	"strings"
@@ -26,7 +27,7 @@ func main() {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	const dedicatesCount = 65535 * 2
+	dedicatesCount := 65535 * int(math.Log10(float64(outputFileSize))-5)
 	dedicates := make([]string, dedicatesCount)
 	for i := 0; i < dedicatesCount; i++ {
 		dedicates[i] = strings.Repeat(fmt.Sprintf("%d", rand.Intn(65535)), rand.Intn(dedicatesCount/65535)+50) + "\n"

@@ -6,6 +6,18 @@ type Item struct {
 	Count int
 }
 
+func topNHeapSort(arr []Item, topn int) {
+	n := len(arr)
+	for i := n; i > -1; i-- {
+		heapifyItem(arr, n, i)
+	}
+
+	for i := n - 1; i > n-1-topn; i-- {
+		arr[i], arr[0] = arr[0], arr[i]
+		heapifyItem(arr, i, 0)
+	}
+}
+
 func heapSort(arr []Item) {
 	n := len(arr)
 	for i := n; i > -1; i-- {
