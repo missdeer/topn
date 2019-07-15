@@ -7,6 +7,7 @@ import (
 
 func count(fm map[int]*os.File, topN int) (items []Item) {
 	// count in each smaller file
+	orderred := false
 	for _, f := range fm {
 		f.Seek(0, 0)
 		sm := make(map[string]int)
@@ -21,7 +22,8 @@ func count(fm map[int]*os.File, topN int) (items []Item) {
 		f.Close()
 
 		for s, c := range sm {
-			if (len(items) >= topN && c >= items[0].Count) || // drop smaller ones
+			if !orderred ||
+				(orderred && len(items) >= topN && c >= items[0].Count) || // drop smaller ones
 				len(items) < topN {
 				items = append(items, Item{
 					Str:   s,
@@ -32,7 +34,8 @@ func count(fm map[int]*os.File, topN int) (items []Item) {
 
 		// get the top N items
 		topNHeapSort(items, topN)
-		if len(items) > topN {
+		if len(items) >= topN {
+			orderred = true
 			items = items[len(items)-topN:] // keep the last N elements
 		}
 	}
