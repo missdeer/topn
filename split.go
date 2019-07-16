@@ -16,6 +16,7 @@ func split2(inputFile string, fm map[int]string) {
 	}
 	defer file.Close()
 
+	fh := make(map[string]*os.File, N)
 	// split to smaller files
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
@@ -38,16 +39,15 @@ func split2(inputFile string, fm map[int]string) {
 				return
 			}
 			fm[h] = fn
+			fh[fn] = f
 		} else {
-			// open file to append
-			f, e = os.OpenFile(fn, os.O_APPEND, 0644)
-			if e != nil {
-				log.Fatal(e)
-				return
-			}
+			f = fh[fn]
 		}
 
 		f.WriteString(line + "\n")
+	}
+
+	for _, f := range fh {
 		f.Close()
 	}
 }
@@ -60,6 +60,7 @@ func split(inputFile string, fm map[int]string) {
 	}
 	defer file.Close()
 
+	fh := make(map[string]*os.File, N)
 	// split to smaller files
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
@@ -82,20 +83,20 @@ func split(inputFile string, fm map[int]string) {
 				return
 			}
 			fm[h] = fn
+			fh[fn] = f
 		} else {
-			// open file to append
-			f, e = os.OpenFile(fn, os.O_APPEND, 0644)
-			if e != nil {
-				log.Fatal(e)
-				return
-			}
+			f = fh[fn]
 		}
 
 		f.WriteString(line + "\n")
+	}
+
+	for _, f := range fh {
 		f.Close()
 	}
 
-	for _, fn := range fm {
+	var toRemove []int
+	for i, fn := range fm {
 		fi, e := os.Stat(fn)
 		if e != nil {
 			log.Fatal(e)
@@ -104,7 +105,10 @@ func split(inputFile string, fm map[int]string) {
 		if fi.Size() > 1000000000 {
 			// split again
 			split(fn, fm)
-			os.Remove(fn)
+			toRemove = append(toRemove, i)
 		}
+	}
+	for _, i := range toRemove {
+		delete(fm, i)
 	}
 }
