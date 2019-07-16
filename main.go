@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 )
 
@@ -28,26 +27,15 @@ func main() {
 	flag.StringVar(&tempDir, "tempDir", "./", "temporary directory stores temporary files during program runs")
 	flag.Parse()
 
-	fm := make(map[int]*os.File, N)
-
-	file, err := os.Open(inputFile)
-
-	if err != nil {
-		log.Fatalf("failed opening file: %s", err)
-		return
-	}
-
+	fm := make(map[int]string, N)
 	// split to about 128 smaller itnermediate file, so that it's small enough to fit the memory usage
-	split(file, fm)
-	file.Close()
+	split(inputFile, fm)
 
 	// count in each smaller intermediate files, and merge the sorted result
 	items := count(fm, 100)
 
 	// remove splitted smaller intermediate files
-	for _, f := range fm {
-		fn := f.Name()
-		f.Close()
+	for _, fn := range fm {
 		os.Remove(fn)
 	}
 	// reversing

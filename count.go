@@ -2,14 +2,19 @@ package main
 
 import (
 	"bufio"
+	"log"
 	"os"
 )
 
-func count(fm map[int]*os.File, topN int) (items []Item) {
+func count(fm map[int]string, topN int) (items []Item) {
 	// count in each smaller file
 	orderred := false
-	for _, f := range fm {
-		f.Seek(0, 0)
+	for _, fn := range fm {
+		f, e := os.OpenFile(fn, os.O_RDONLY, 0644)
+		if e != nil {
+			log.Fatal(e)
+			return
+		}
 		sm := make(map[string]int)
 
 		scanner := bufio.NewScanner(f)

@@ -7,20 +7,25 @@ import (
 )
 
 func TestSplit(t *testing.T) {
-	fm := make(map[int]*os.File, 128)
-	f, e := os.OpenFile(filepath.Join("testdata", "1.txt"), os.O_RDONLY, 0644)
-	if e != nil {
-		t.Error(e)
-	}
-	defer f.Close()
-	split(f, fm)
+	fm := make(map[int]string, 128)
+	split(filepath.Join("testdata", "1.txt"), fm)
 	if len(fm) > 128 || len(fm) < 100 {
 		t.Error("expected to split to about 128 smaller files, got", len(fm))
 	}
 
-	for _, f := range fm {
-		fn := f.Name()
-		f.Close()
+	for _, fn := range fm {
+		os.Remove(fn)
+	}
+}
+
+func TestSplit2(t *testing.T) {
+	fm := make(map[int]string, 128)
+	split2(filepath.Join("testdata", "1.txt"), fm)
+	if len(fm) > 128 || len(fm) < 100 {
+		t.Error("expected to split to about 128 smaller files, got", len(fm))
+	}
+
+	for _, fn := range fm {
 		os.Remove(fn)
 	}
 }
