@@ -24,14 +24,18 @@ topn -input testdata/1.txt
 --- PASS: TestCount (0.00s)
 === RUN   TestHash
 --- PASS: TestHash (0.00s)
+=== RUN   TestHash2
+--- PASS: TestHash2 (0.00s)
 === RUN   TestHeapSort
 --- PASS: TestHeapSort (0.00s)
 === RUN   TestTopNHeapSort
 --- PASS: TestTopNHeapSort (0.00s)
 === RUN   TestSplit
---- PASS: TestSplit (1.69s)
+--- PASS: TestSplit (3.13s)
+=== RUN   TestSplit2
+--- PASS: TestSplit2 (2.99s)
 PASS
-ok      github.com/missdeer/topn        2.034s
+ok  	github.com/missdeer/topn	6.123s
 ```
 
 # Notes
